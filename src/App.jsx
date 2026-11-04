@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import Level from "./Level";
 import Option from "./Option";
 import Slider from "./Slider";
+import { speak, stopSpeaking, ttsSupported } from "./speech";
 
 const KANA = "あいうえおかきくけこがぎぐげごさしすせそざじずぜぞたちつてとだぢづでどなにぬねのはひふへほばびぶべぼぱぴぷぺぽまみむめもやゆよゃゅょらりるれろわをんゎっアイウエオカキクケコガギグゲゴサシスセソザジズゼゾタチツテトダヂヅデドナニヌネノハヒフヘホバビブベボパピプペポマミムメモヤユヨャュョラリルレロワヲンヮーッ-";
 
@@ -17,12 +18,25 @@ function App() {
 	const [showReading, setShowReading] = useState(true);
 	const [showSenses, setShowSenses] = useState(false);
 	const [kakuFont, setKakuFont] = useState(false);
+	const [tts, setTts] = useState(() => {
+		try { return localStorage.getItem('tts') === '1'; } catch { return false; }
+	});
 	const [tango, setTango] = useState({
 		word: '言語',
 		reading: 'げんご',
 		senses: [["language"]]
 	});
 
+
+	useEffect(() => {
+		try { localStorage.setItem('tts', tts ? '1' : '0'); } catch { /* ignore */ }
+		if (!tts) stopSpeaking();
+	}, [tts]);
+
+	// Speak each new word (the kana reading gives the most reliable pronunciation).
+	useEffect(() => {
+		if (tts && tango) speak(tango.reading || tango.word);
+	}, [tts, tango]);
 
 	const handlePlay = useCallback(() => {
 		setPlay(prevPlay => !prevPlay);
@@ -132,6 +146,9 @@ function App() {
 				case 'KeyF':
 					setKakuFont(prev => !prev);
 					break;
+				case 'KeyV':
+					if (ttsSupported) setTts(prev => !prev);
+					break;
 				case 'KeyY':
 					setLevel('熟');
 					break;
@@ -191,6 +208,7 @@ function App() {
 						<hr className="border-coarse-wool border-4" />
 						<Option show={showReading} onClick={() => setShowReading(prev => !prev)} value="読" />
 						<Option show={showSenses} onClick={() => setShowSenses(prev => !prev)} value="意" />
+						{ttsSupported && <Option show={tts} onClick={() => setTts(prev => !prev)} value="音" />}
 						<hr className="border-coarse-wool border-4" />
 						<Option show={kakuFont} onClick={() => setKakuFont(prev => !prev)} value="新" />
 					</div>
