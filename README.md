@@ -18,6 +18,7 @@
 - [X] Toggleable fonts (Kaku Gothic New / Old Mincho), Press F
 - [X] Toggleable Control (Press C) 
 - [X] Toggleable menu (Press ESC) 
+- [X] Text-to-speech pronunciation of each word (Press V, or the 音 button)
 
 ## Future Ideas
 
