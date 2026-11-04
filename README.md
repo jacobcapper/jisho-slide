@@ -1,5 +1,7 @@
 # Jisho-Slide
 
+> Fork of [wmCmo/jisho-slide](https://github.com/wmCmo/jisho-slide) with added text-to-speech.
+
 - Shows different JLPT words every few seconds.
 - All words are pulled from [jisho.org](https://jisho.org/) using its [API](https://jisho.org/forum/54fefc1f6e73340b1f160000-is-there-any-kind-of-search-api).
 - Uses `dev` theme from [monkeytype](https://monkeytype.com/).
